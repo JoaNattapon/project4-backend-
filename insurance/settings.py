@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     # 'insurance_app.apps.InsuranceAppConfig',
-    'insurance_app'
+    'insurance_app',
+    'account',
+    
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True

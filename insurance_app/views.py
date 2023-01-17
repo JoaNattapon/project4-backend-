@@ -13,7 +13,7 @@ def packages_list(request):
     return JsonResponse({'packages':serializer.data})
 
 
-def user_detail
+
 
 
 
