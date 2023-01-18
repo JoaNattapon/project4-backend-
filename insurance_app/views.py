@@ -3,6 +3,11 @@ from django.http import JsonResponse
 from .models import Packages, Users
 from .serializers import PackagesSerializer, UsersSerializer
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework import viewsets, permissions, generics
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -11,6 +16,56 @@ def packages_list(request):
     package = Packages.objects.all()
     serializer = PackagesSerializer(package, many = True)
     return JsonResponse({'packages':serializer.data})
+
+
+
+class UsersList(generics.ListCreateAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+
+class UsersDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Users.objects.all()
+    serializer_class = UsersSerializer
+
+
+
+
+
+
+
+
+
+
+
+class SignupView(APIView):
+    def post(self, request):
+        data = request.data
+        serializer = UsersSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginView(APIView):
+    permissions_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        username = request.data.get("username")
+        password = request.data.get("password")
+        user = authenticate(username = username, password = password)
+        if user :
+            login(request, user)
+            serializer = UsersSerializer(user)
+            return Response(serializer.data)
+        
+        return Response({"error": "Invalid credentials"}, status = 400)
+
+class LogoutView(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        logout(request)
+        return Response({"success": "Successfully logged out"})
 
 
 

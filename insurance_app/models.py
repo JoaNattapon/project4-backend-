@@ -3,20 +3,20 @@ from django.db import models
 # Create your models here.
 
 class Packages(models.Model):
-    pack_id = models.AutoField(primary_key = True)
     description = models.CharField(max_length = 500)
     price = models.IntegerField()
     buydate = models.DateField()
 
     def __str__(self):
-        return f'{self.pack_id}'
+        return f'{self.description}'
 
 class Users(models.Model):
-    user_id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length = 200)
-    address = models.CharField(max_length = 500)
-    email = models.CharField(max_length = 200)
-    package = models.ForeignKey('insurance_app.Packages', on_delete = models.CASCADE)
+    username = models.CharField(max_length = 150, default= "")
+    password = models.CharField(max_length = 150, default= "")
+    name = models.CharField(max_length = 200, default = "")
+    address = models.CharField(max_length = 500, default = "")
+    email = models.CharField(max_length = 200, default = "")
+    package = models.ForeignKey('insurance_app.Packages', on_delete = models.CASCADE, default = "7")
 
     def __str__(self):
-        return self.user_id
+        return self.username
