@@ -8,19 +8,13 @@ class PackagesSerializer(serializers.ModelSerializer):
         #  ['description', 'price', 'buydate',]
 
 class UsersSerializer(serializers.ModelSerializer):
-    # packages = serializers.ModelSerializer(
-    #     view_name="package_detail"
-    # )
-    # package_detail=serializers.PrimaryKeyRelatedField(
-
-    #     source='package',
-    #     queryset= Packages.objects.all()
-    # )
-    # pack=serializers.PrimaryKeyRelatedField(
-    #     queryset= Packages.objects.all()
-    # )
+    username = serializers.CharField(max_length = 150, default= "")
+    password = serializers.CharField(max_length = 150, default= "")
+    name = serializers.CharField(max_length = 200, default = "")
+    address = serializers.CharField(max_length = 500, default = "")
+    email = serializers.CharField(max_length = 200, default = "")
     class Meta:
         model = Users
-        fields = ['username', 'name', 'address', 'email', 'package']
+        fields = ['username', 'password', 'name', 'address', 'email', 'package']
         depth = 1
 

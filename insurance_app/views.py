@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Packages, Users
 from .serializers import PackagesSerializer, UsersSerializer
@@ -51,22 +51,37 @@ class SignupView(APIView):
         try:
             user = User.objects.create_user(username=data["username"],password=data["password"])
             user.save()
-            user_data = Users.objects.create(user=user,name=data["name"],address=data["address"],email=data["email"],package=data["package"])
+            user_data = Users.objects.create(user=user,name=data["name"],address=data["address"],email=data["email"], username=data["username"])
             user_data.save()
             return Response({'message': 'Account created sucessfully.'},status = status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'message': 'Username already taken.'},status = status.HTTP_400_BAD_REQUEST)
 
+class EditUserView(APIView):
+    def put(self, request, id):
+        user = Users.objects.get(id=id)
+        serializer = UsersSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# class SignupView(APIView):
-#     def post(self, request):
-#         data = request.data
-#         serializer = UsersSerializer(data=data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+def buy_package(request, package_id):
+    if request.method == 'PUT':
+        package = get_object_or_404(Packages, pk = package_id)
+        user = request.user
+        user.package = package
+        user.save()
+        return JsonResponse({'message': 'Purchase successful'})
 
+
+def home(request):
+    if request.user.is_authenticated:
+        print('Yes')
+        if request.user.is_staff == False:
+            user = request.user
+    else :
+        print('No')
 
 class LogoutView(APIView):
     permissions_classes = [permissions.IsAuthenticated]
