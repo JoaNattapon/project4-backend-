@@ -21,5 +21,6 @@ class UsersSerializer(serializers.ModelSerializer):
     # )
     class Meta:
         model = Users
-        fields = ['username', 'password', 'name', 'address', 'email', 'package']
+        fields = ['username', 'name', 'address', 'email', 'package']
         depth = 1
+

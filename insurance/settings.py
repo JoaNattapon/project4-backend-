@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,10 +84,11 @@ WSGI_APPLICATION = 'insurance.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'project4',
-        'USER': 'joeadmin',
-        'PASSWORD': '6363',
-        'HOST': 'localhost'
+        'NAME': 'JoaNattapon/healthinsure',
+        'USER': 'JoaNattapon',
+        'PASSWORD': 'v2_3yBN5_FV6WdFREybbbe3XAgsPhdYk',
+        'HOST': 'db.bit.io',
+        
     }
 }
 
@@ -142,3 +143,6 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.TokenAuthentication',
     # ]
 }
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
